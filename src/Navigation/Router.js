@@ -1,24 +1,65 @@
-import React from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import { HeaderButtons, HeaderButton, Item, HiddenItem } from 'react-navigation-header-buttons';
+// import React from 'react';
+// import Icon from 'react-native-vector-icons/MaterialIcons';
+// import { HeaderButtons, HeaderButton, Item, HiddenItem } from 'react-navigation-header-buttons';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 // eslint-disable-next-line import/no-cycle
 import Home from '../components/Home';
 import Detail from '../components/Detail';
 import DrawerContent from '../components/DrawerContent';
 import { MAIN_SCREEN, DETAIL_SCREEN } from './types';
+import { ALL, BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
 
 
 const HomeStack = createMaterialTopTabNavigator(
   {
-    ALL: { screen: Home },
-    Business: { screen: Detail },
-    Entertainment: { screen: Detail },
-    General: { screen: Detail },
-    Health: { screen: Detail },
-    Science: { screen: Detail },
-    Sports: { screen: Detail },
-    Technology: { screen: Detail },
+    ALL: {
+      screen: Home,
+      params: {
+        Category: ALL
+      }
+    },
+    BUSINESS: {
+      screen: Home,
+      params: {
+        Category: BUSINESS
+      }
+    },
+    ENTERTAINMENT: {
+      screen: Home,
+      params: {
+        Category: ENTERTAINMENT
+      }
+    },
+    GENERAL: {
+      screen: Home,
+      params: {
+        Category: GENERAL
+      }
+    },
+    HEALTH: {
+      screen: Home,
+      params: {
+        Category: HEALTH
+      }
+    },
+    SCIENCE: {
+      screen: Home,
+      params: {
+        Category: SCIENCE
+      }
+    },
+    SPORTS: {
+      screen: Home,
+      params: {
+        Category: SPORTS
+      }
+    },
+    TECHNOLOGY: {
+      screen: Home,
+      params: {
+        Category: TECHNOLOGY
+      }
+    },
   },
   {
     initialRouteName: 'ALL',
@@ -31,7 +72,7 @@ const HomeStack = createMaterialTopTabNavigator(
         color: 'black'
       },
       tabStyle: {
-        width: 130,
+        width: 150,
       },
       style: {
         backgroundColor: 'white',
@@ -55,28 +96,28 @@ const MainDrawer = createDrawerNavigator(
     // mode: 'card'
   }
 );
-const MaterialIcons = passMeFurther => (
-  <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
-);
+// const MaterialIcons = passMeFurther => (
+//   <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
+// );
 
 const RootStack = createStackNavigator(
   {
     [MAIN_SCREEN]: {
       screen: MainDrawer,
-      navigationOptions: ({ navigation }) => ({
-        headerTitle: 'NEWSREACT',
-        headerLeft: (
-          <HeaderButtons HeaderButtonComponent={MaterialIcons}>
-            <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
-          </HeaderButtons>
-        ),
-        headerRight: (
-          <HeaderButtons HeaderButtonComponent={MaterialIcons} OverflowIcon={<Icon name="more-vert" size={23} color="black" />}>
-            <HiddenItem title="Language(All)" iconName="ios-search" onPress={() => alert('search')} />
-            <HiddenItem title="Country(All)" onPress={() => alert('select')} />
-          </HeaderButtons>
-        ),
-      }),
+      // navigationOptions: ({ navigation }) => ({
+      //   headerTitle: 'NEWSREACT',
+      //   headerLeft: (
+      //     <HeaderButtons HeaderButtonComponent={MaterialIcons}>
+      //       <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
+      //     </HeaderButtons>
+      //   ),
+      //   headerRight: (
+      //     <HeaderButtons HeaderButtonComponent={MaterialIcons} OverflowIcon={<Icon name="more-vert" size={23} color="black" />}>
+      //       <HiddenItem title="Language(All)" iconName="ios-search" onPress={() => alert('search')} />
+      //       <HiddenItem title="Country(All)" onPress={() => alert('select')} />
+      //     </HeaderButtons>
+      //   ),
+      // }),
     },
     [DETAIL_SCREEN]: { screen: Detail }
   }

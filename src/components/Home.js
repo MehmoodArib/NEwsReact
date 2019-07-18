@@ -1,78 +1,89 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { HeaderButtons, HeaderButton, Item, HiddenItem } from 'react-navigation-header-buttons';
+import { View, ActivityIndicator, Text } from 'react-native';
 import { SinglePickerMaterialDialog } from 'react-native-material-dialog';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
+import { fetchNews } from '../actions/NewsActions';
 // eslint-disable-next-line import/no-cycle
 import ListItem from './ListItem';
-import { API_KEY } from '../types';
+import Countries from '../Countries';
+import Languages from '../Languages';
 import { Button, CardSection } from './common';
+import { ALL, BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
 
-const url = 'https://newsapi.org/v2/top-headlines?'
-  + 'country=in&'
-  + `apiKey=${API_KEY}`;
+const MaterialIcons = passMeFurther => (
+  <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
+);
 
-
-const LONG_LIST = [
-  'All',
-  'List element 1',
-  'List element 2',
-  'List element 3',
-  'List element 4',
-  'List element 5',
-  'List element 6',
-  'List element 7',
-  'List element 8',
-  'List element 9',
-  'List element 10',
-  'List element 12',
-  'List element 13',
-  'List element 14',
-  'List element 15',
-  'List element 16',
-  'List element 17',
-  'List element 18',
-  'List element 19',
-];
 
 class Home extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    headerTitle: 'NEWSREACT',
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={MaterialIcons}>
+        <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
+      </HeaderButtons>
+    ),
+    headerRight: (
+      <HeaderButtons HeaderButtonComponent={MaterialIcons} OverflowIcon={<Icon name="more-vert" size={23} color="black" />}>
+        <HiddenItem title="Language(All)" iconName="ios-search" onPress={() => alert('search')} />
+        <HiddenItem title="Country(All)" onPress={() => alert('select')} />
+      </HeaderButtons>
+    )
+
+  });
+
   constructor(props) {
     super(props);
     this.state = {
-      data: {
-        articles: [],
-      },
       LanguagePickerVisible: false,
-      LanguagePickerSelectedItem: { value: 0, label: 'All', selected: true },
+      LanguagePickerSelectedItem: { value: '0', label: 'All', selected: true },
       CountryPickerVisible: false,
-      CountryPickerSelectedItem: { value: 0, label: 'All', selected: true }
+      CountryPickerSelectedItem: { value: 'in', label: 'India', selected: true }
     };
   }
 
   componentDidMount() {
-    fetch(url)
-      .then((response) => {
-        return response.json();
-      }).then((data) => {
-        this.setState({
-          data
-        });
-      });
+    this.props.fetchNews(this.props.navigation.getParam('Category'), this.state.CountryPickerSelectedItem.value);
+  }
+
+  getData() {
+    switch (this.props.navigation.getParam('Category')) {
+      case ALL:
+        return this.props.allNews.news.articles;
+      case GENERAL:
+        return this.props.generalNews.news.articles;
+      case BUSINESS:
+        return this.props.businessNews.news.articles;
+      case HEALTH:
+        return this.props.healthNews.news.articles;
+      case SCIENCE:
+        return this.props.scienceNews.news.articles;
+      case SPORTS:
+        return this.props.sportsNews.news.articles;
+      case TECHNOLOGY:
+        return this.props.technologyNews.news.articles;
+      case ENTERTAINMENT:
+        return this.props.entertainmentNews.news.articles;
+      default:
+        return {};
+    }
   }
 
   render() {
-    console.log('====================================');
-    console.log(this.state.CountryPickerSelectedItem);
-    console.log('====================================');
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <FlatList
-          data={this.state.data.articles}
+          data={this.getData()}
           renderItem={({ item }) => <ListItem news={item} />}
         />
         <SinglePickerMaterialDialog
           title="Language"
           scrolled
-          items={LONG_LIST.map((row, index) => ({ value: index, label: row }))}
+          items={Languages.map(_language => ({ value: _language.code, label: _language.name }))}
           visible={this.state.LanguagePickerVisible}
           selectedItem={this.state.LanguagePickerSelectedItem}
           onCancel={() => this.setState({ LanguagePickerVisible: false })}
@@ -83,9 +94,9 @@ class Home extends Component {
           }
         />
         <SinglePickerMaterialDialog
-          title="Language"
+          title="Country"
           scrolled
-          items={LONG_LIST.map((row, index) => ({ value: index, label: row }))}
+          items={Countries.map(_country => ({ value: _country.code, label: _country.name }))}
           visible={this.state.CountryPickerVisible}
           selectedItem={this.state.CountryPickerSelectedItem}
           onCancel={() => this.setState({ CountryPickerVisible: false })}
@@ -105,4 +116,25 @@ class Home extends Component {
     );
   }
 }
-export default Home;
+
+
+function mapStateToProps(state) {
+  return {
+    allNews: state.allNews,
+    businessNews: state.businessNews,
+    entertainmentNews: state.entertainmentNews,
+    generalNews: state.generalNews,
+    healthNews: state.healthNews,
+    scienceNews: state.scienceNews,
+    sportsNews: state.sportsNews,
+    technologyNews: state.technologyNews
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    ...bindActionCreators({ fetchNews }, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

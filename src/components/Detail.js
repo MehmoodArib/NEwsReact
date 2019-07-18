@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Text, Button } from 'react-native';
+import { Text } from 'react-native';
 
 // eslint-disable-next-line react/prefer-stateless-function
 class Detail extends Component {
-
   static navigationOptions = ({ navigation }) => ({
     headerTitle: 'Details',
 
