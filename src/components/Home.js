@@ -45,15 +45,16 @@ class Home extends Component {
     };
   }
 
-  componentWillReceiveProps() {
+  componentWillMount() {
     this.props.fetchNews(this.props.navigation.getParam('Category'), this.props.preference.country.value);
   }
 
   render() {
+    console.log(this.props.news);
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <FlatList
-          data={this.props.news}
+          data={this.props.news.news.articles}
           renderItem={({ item }) => <ListItem news={item} />}
         />
         <SinglePickerMaterialDialog
@@ -112,7 +113,7 @@ function mapStateToProps(state, props) {
     case ENTERTAINMENT:
       return { news: state.entertainmentNews, preference: state.preferenceReducer };
     default:
-      return {};
+      return { news: [], preference: {} };
   }
 }
 
