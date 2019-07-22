@@ -1,7 +1,4 @@
 import {
-  FETCHING_ALL_NEWS,
-  FETCH_ALL_NEWS_FAILURE,
-  FETCH_ALL_NEWS_SUCCESS,
   FETCHING_BUSINESS_NEWS,
   FETCH_BUSINESS_NEWS_SUCCESS,
   FETCH_BUSINESS_NEWS_FAILURE,
@@ -32,10 +29,7 @@ const BaseUrl = 'https://newsapi.org/v2/top-headlines?'
 
 // eslint-disable-next-line import/prefer-default-export
 export function fetchNews(category, country) {
-  let API = `${BaseUrl}&country=${country}`;
-  if (category !== 'ALL') {
-    API += `&category=${category}`;
-  }
+  const API = `${BaseUrl}&country=${country}&category=${category}`;
   return (dispatch) => {
     dispatch(getNews(category));
     return (
@@ -50,10 +44,6 @@ export function fetchNews(category, country) {
 
 function getNews(category) {
   switch (category) {
-    case ALL:
-      return {
-        type: FETCHING_ALL_NEWS
-      };
     case GENERAL:
       return {
         type: FETCHING_GENERAL_NEWS
@@ -89,11 +79,6 @@ function getNews(category) {
 
 function getNewsSuccess(data, category) {
   switch (category) {
-    case ALL:
-      return {
-        type: FETCH_ALL_NEWS_SUCCESS,
-        data
-      };
     case GENERAL:
       return {
         type: FETCH_GENERAL_NEWS_SUCCESS,
@@ -136,10 +121,6 @@ function getNewsSuccess(data, category) {
 
 function getNewsFailure(category) {
   switch (category) {
-    case ALL:
-      return {
-        type: FETCH_ALL_NEWS_FAILURE
-      };
     case GENERAL:
       return {
         type: FETCH_GENERAL_NEWS_FAILURE

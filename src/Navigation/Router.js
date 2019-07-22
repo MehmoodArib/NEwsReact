@@ -7,17 +7,18 @@ import Home from '../components/Home';
 import Detail from '../components/Detail';
 import DrawerContent from '../components/DrawerContent';
 import { MAIN_SCREEN, DETAIL_SCREEN } from './types';
-import { ALL, BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
+import { BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
 
 
 const HomeStack = createMaterialTopTabNavigator(
   {
-    ALL: {
+    GENERAL: {
       screen: Home,
       params: {
-        Category: ALL
+        Category: GENERAL
       }
     },
+
     BUSINESS: {
       screen: Home,
       params: {
@@ -28,12 +29,6 @@ const HomeStack = createMaterialTopTabNavigator(
       screen: Home,
       params: {
         Category: ENTERTAINMENT
-      }
-    },
-    GENERAL: {
-      screen: Home,
-      params: {
-        Category: GENERAL
       }
     },
     HEALTH: {
@@ -62,7 +57,7 @@ const HomeStack = createMaterialTopTabNavigator(
     },
   },
   {
-    initialRouteName: 'ALL',
+    initialRouteName: 'GENERAL',
     animationEnabled: true,
     lazy: true, // make false if you want render all screen imidiately.
     optimizationsEnabled: true,

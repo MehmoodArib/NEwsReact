@@ -7,12 +7,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
 import { fetchNews } from '../actions/NewsActions';
+import { setCountry, setLanguage } from '../actions/PrefrenceActions';
 // eslint-disable-next-line import/no-cycle
 import ListItem from './ListItem';
 import Countries from '../Countries';
 import Languages from '../Languages';
 import { Button, CardSection } from './common';
-import { ALL, BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
+import { BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
 
 const MaterialIcons = passMeFurther => (
   <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
@@ -40,44 +41,19 @@ class Home extends Component {
     super(props);
     this.state = {
       LanguagePickerVisible: false,
-      LanguagePickerSelectedItem: { value: '0', label: 'All', selected: true },
       CountryPickerVisible: false,
-      CountryPickerSelectedItem: { value: 'in', label: 'India', selected: true }
     };
   }
 
-  componentDidMount() {
-    this.props.fetchNews(this.props.navigation.getParam('Category'), this.state.CountryPickerSelectedItem.value);
-  }
-
-  getData() {
-    switch (this.props.navigation.getParam('Category')) {
-      case ALL:
-        return this.props.allNews.news.articles;
-      case GENERAL:
-        return this.props.generalNews.news.articles;
-      case BUSINESS:
-        return this.props.businessNews.news.articles;
-      case HEALTH:
-        return this.props.healthNews.news.articles;
-      case SCIENCE:
-        return this.props.scienceNews.news.articles;
-      case SPORTS:
-        return this.props.sportsNews.news.articles;
-      case TECHNOLOGY:
-        return this.props.technologyNews.news.articles;
-      case ENTERTAINMENT:
-        return this.props.entertainmentNews.news.articles;
-      default:
-        return {};
-    }
+  componentWillReceiveProps() {
+    this.props.fetchNews(this.props.navigation.getParam('Category'), this.props.preference.country.value);
   }
 
   render() {
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <FlatList
-          data={this.getData()}
+          data={this.props.news}
           renderItem={({ item }) => <ListItem news={item} />}
         />
         <SinglePickerMaterialDialog
@@ -85,11 +61,11 @@ class Home extends Component {
           scrolled
           items={Languages.map(_language => ({ value: _language.code, label: _language.name }))}
           visible={this.state.LanguagePickerVisible}
-          selectedItem={this.state.LanguagePickerSelectedItem}
+          selectedItem={this.props.preference.language}
           onCancel={() => this.setState({ LanguagePickerVisible: false })}
           onOk={(result) => {
             this.setState({ LanguagePickerVisible: false });
-            this.setState({ LanguagePickerSelectedItem: result.selectedItem });
+            this.props.setLanguage(result.selectedItem);
           }
           }
         />
@@ -98,11 +74,11 @@ class Home extends Component {
           scrolled
           items={Countries.map(_country => ({ value: _country.code, label: _country.name }))}
           visible={this.state.CountryPickerVisible}
-          selectedItem={this.state.CountryPickerSelectedItem}
+          selectedItem={this.props.preference.country}
           onCancel={() => this.setState({ CountryPickerVisible: false })}
           onOk={(result) => {
             this.setState({ CountryPickerVisible: false });
-            this.setState({ CountryPickerSelectedItem: result.selectedItem });
+            this.props.setCountry(result.selectedItem);
           }
           }
         />
@@ -118,22 +94,31 @@ class Home extends Component {
 }
 
 
-function mapStateToProps(state) {
-  return {
-    allNews: state.allNews,
-    businessNews: state.businessNews,
-    entertainmentNews: state.entertainmentNews,
-    generalNews: state.generalNews,
-    healthNews: state.healthNews,
-    scienceNews: state.scienceNews,
-    sportsNews: state.sportsNews,
-    technologyNews: state.technologyNews
-  };
+function mapStateToProps(state, props) {
+  const category = props.navigation.getParam('Category');
+  switch (category) {
+    case GENERAL:
+      return { news: state.generalNews, preference: state.preferenceReducer };
+    case BUSINESS:
+      return { news: state.businessNews, preference: state.preferenceReducer };
+    case HEALTH:
+      return { news: state.healthNews, preference: state.preferenceReducer };
+    case SCIENCE:
+      return { news: state.scienceNews, preference: state.preferenceReducer };
+    case SPORTS:
+      return { news: state.sportsNews, preference: state.preferenceReducer };
+    case TECHNOLOGY:
+      return { news: state.technologyNews, preference: state.preferenceReducer };
+    case ENTERTAINMENT:
+      return { news: state.entertainmentNews, preference: state.preferenceReducer };
+    default:
+      return {};
+  }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    ...bindActionCreators({ fetchNews }, dispatch)
+    ...bindActionCreators({ fetchNews, setCountry, setLanguage }, dispatch)
   };
 }
 
