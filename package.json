@@ -14,6 +14,7 @@
     "react-native-linear-gradient": "^2.5.4",
     "react-native-material-dialog": "^0.7.6",
     "react-native-vector-icons": "^6.6.0",
+    "react-native-webview": "^5.12.1",
     "react-navigation": "^3.11.0",
     "react-navigation-header-buttons": "^3.0.0",
     "react-redux": "^7.1.0",

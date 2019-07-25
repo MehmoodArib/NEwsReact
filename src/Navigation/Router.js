@@ -4,9 +4,11 @@
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 // eslint-disable-next-line import/no-cycle
 import Home from '../components/Home';
-import Detail from '../components/Detail';
+import Special from '../components/Special';
 import DrawerContent from '../components/DrawerContent';
-import { MAIN_SCREEN, DETAIL_SCREEN } from './types';
+import MyWebView from '../components/MyWebView';
+import PrefrencesScreen from '../components/PrefrencesScreen';
+import { MAIN_SCREEN, SPECIAL_SCREEN, MY_WEBVIEW, PREFRENCES_SCREEN } from './types';
 import { BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
 
 
@@ -114,7 +116,12 @@ const RootStack = createStackNavigator(
       //   ),
       // }),
     },
-    [DETAIL_SCREEN]: { screen: Detail }
+    [SPECIAL_SCREEN]: { screen: Special },
+    [MY_WEBVIEW]: { screen: MyWebView },
+    [PREFRENCES_SCREEN]: { screen: PrefrencesScreen }
+  },
+  {
+    headerMode: 'none'
   }
 );
 export default createAppContainer(RootStack);

@@ -1,7 +1,7 @@
 import {
-  FETCHING_SPORTS_NEWS,
-  FETCH_SPORTS_NEWS_FAILURE,
-  FETCH_SPORTS_NEWS_SUCCESS,
+  FETCHING_SOURCE_NEWS,
+  FETCH_SOURCE_NEWS_FAILURE,
+  FETCH_SOURCE_NEWS_SUCCESS,
 } from '../actions/types';
 import Status from '../Status';
 
@@ -11,20 +11,20 @@ const initialState = {
   status: Status.DEFAULT
 };
 
-export default function SportsNewsReducer(state = initialState, action) {
+export default function NewsReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCHING_SPORTS_NEWS:
+    case FETCHING_SOURCE_NEWS:
       return {
         ...state,
         status: action.payload.status
       };
-    case FETCH_SPORTS_NEWS_SUCCESS:
+    case FETCH_SOURCE_NEWS_SUCCESS:
       return {
         ...state,
         status: action.payload.status,
         news: action.payload.data
       };
-    case FETCH_SPORTS_NEWS_FAILURE:
+    case FETCH_SOURCE_NEWS_FAILURE:
       return {
         ...state,
         status: action.payload.status,

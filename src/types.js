@@ -6,3 +6,4 @@ export const HEALTH = 'HEALTH';
 export const SCIENCE = 'SCIENCE';
 export const SPORTS = 'SPORTS';
 export const TECHNOLOGY = 'TECHNOLOGY';
+export const SOURCE = 'SOURCE';

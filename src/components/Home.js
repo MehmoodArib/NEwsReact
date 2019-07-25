@@ -14,6 +14,7 @@ import Countries from '../Countries';
 import Languages from '../Languages';
 import { Button, CardSection } from './common';
 import { BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
+import GenericTemplate from '../GenericTemplate';
 
 const MaterialIcons = passMeFurther => (
   <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
@@ -46,50 +47,53 @@ class Home extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchNews(this.props.navigation.getParam('Category'), this.props.preference.country.value);
+    this.props.fetchNews({ category: this.props.navigation.getParam('Category'), country: this.props.preference.country.value });
   }
 
   render() {
-    console.log(this.props.news);
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <FlatList
-          data={this.props.news.news.articles}
-          renderItem={({ item }) => <ListItem news={item} />}
-        />
-        <SinglePickerMaterialDialog
-          title="Language"
-          scrolled
-          items={Languages.map(_language => ({ value: _language.code, label: _language.name }))}
-          visible={this.state.LanguagePickerVisible}
-          selectedItem={this.props.preference.language}
-          onCancel={() => this.setState({ LanguagePickerVisible: false })}
-          onOk={(result) => {
-            this.setState({ LanguagePickerVisible: false });
-            this.props.setLanguage(result.selectedItem);
+      <GenericTemplate status={this.props.status} errorMessage={this.props.errorMessage}>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <FlatList
+            data={this.props.news.articles}
+            renderItem={({ item }) => <ListItem news={item} />}
+          />
+          <SinglePickerMaterialDialog
+            title="Language"
+            scrolled
+            items={Languages.map(_language => ({ value: _language.code, label: _language.name }))}
+            visible={this.state.LanguagePickerVisible}
+            selectedItem={this.props.preference.language}
+            onCancel={() => this.setState({ LanguagePickerVisible: false })}
+            onOk={(result) => {
+              this.setState({ LanguagePickerVisible: false });
+              this.props.setLanguage(result.selectedItem);
+            }
+            }
+          />
+          <SinglePickerMaterialDialog
+            title="Country"
+            scrolled
+            items={Countries.map(_country => ({ value: _country.code, label: _country.name }))}
+            visible={this.state.CountryPickerVisible}
+            selectedItem={this.props.preference.country}
+            onCancel={() => this.setState({ CountryPickerVisible: false })}
+            onOk={(result) => {
+              this.setState({ CountryPickerVisible: false });
+              this.props.setCountry(result.selectedItem);
+            }
+            }
+          />
+          {
+            //   <CardSection>
+            //   <Button buttonText="Languages" onPress={() => this.setState({ LanguagePickerVisible: true })} />
+            // </CardSection>
+            // <CardSection>
+            //   <Button buttonText="Countries" onPress={() => this.setState({ CountryPickerVisible: true })} />
+            // </CardSection>
           }
-          }
-        />
-        <SinglePickerMaterialDialog
-          title="Country"
-          scrolled
-          items={Countries.map(_country => ({ value: _country.code, label: _country.name }))}
-          visible={this.state.CountryPickerVisible}
-          selectedItem={this.props.preference.country}
-          onCancel={() => this.setState({ CountryPickerVisible: false })}
-          onOk={(result) => {
-            this.setState({ CountryPickerVisible: false });
-            this.props.setCountry(result.selectedItem);
-          }
-          }
-        />
-        <CardSection>
-          <Button buttonText="Languages" onPress={() => this.setState({ LanguagePickerVisible: true })} />
-        </CardSection>
-        <CardSection>
-          <Button buttonText="Countries" onPress={() => this.setState({ CountryPickerVisible: true })} />
-        </CardSection>
-      </View>
+        </View>
+      </GenericTemplate>
     );
   }
 }
@@ -99,19 +103,19 @@ function mapStateToProps(state, props) {
   const category = props.navigation.getParam('Category');
   switch (category) {
     case GENERAL:
-      return { news: state.generalNews, preference: state.preferenceReducer };
+      return { news: state.generalNews.news, status: state.generalNews.status, errorMessage: state.generalNews.errorMessage, preference: state.preference };
     case BUSINESS:
-      return { news: state.businessNews, preference: state.preferenceReducer };
+      return { news: state.businessNews.news, status: state.businessNews.status, errorMessage: state.businessNews.errorMessage, preference: state.preference };
     case HEALTH:
-      return { news: state.healthNews, preference: state.preferenceReducer };
+      return { news: state.healthNews.news, status: state.healthNews.status, errorMessage: state.healthNews.errorMessage, preference: state.preference };
     case SCIENCE:
-      return { news: state.scienceNews, preference: state.preferenceReducer };
+      return { news: state.scienceNews.news, status: state.scienceNews.status, errorMessage: state.scienceNews.errorMessage, preference: state.preference };
     case SPORTS:
-      return { news: state.sportsNews, preference: state.preferenceReducer };
+      return { news: state.sportsNews.news, status: state.sportsNews.status, errorMessage: state.sportsNews.errorMessage, preference: state.preference };
     case TECHNOLOGY:
-      return { news: state.technologyNews, preference: state.preferenceReducer };
+      return { news: state.technologyNews.news, status: state.technologyNews.status, errorMessage: state.technologyNews.errorMessage, preference: state.preference };
     case ENTERTAINMENT:
-      return { news: state.entertainmentNews, preference: state.preferenceReducer };
+      return { news: state.entertainmentNews.news, status: state.entertainmentNews.status, errorMessage: state.entertainmentNews.errorMessage, preference: state.preference };
     default:
       return { news: [], preference: {} };
   }

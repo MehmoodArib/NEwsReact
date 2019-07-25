@@ -6,7 +6,11 @@ import HealthNewsReducer from './HealthNewsReducer';
 import ScienceNewsReducer from './ScienceNewsReducer';
 import SportsNewsReducer from './SportsNewsReducer';
 import TechnologyNewsReducer from './TechnologyNewsReducer';
+import SourceWiseNewsReducer from './SourceWiseNewsReducer';
 import PreferenceReducer from './PreferenceReducer';
+import SelectionReducer from './SelectionReducer';
+import SourcesReducer from './SourcesReducer';
+
 
 export default combineReducers({
   businessNews: BusinessNewsReducer,
@@ -16,5 +20,8 @@ export default combineReducers({
   scienceNews: ScienceNewsReducer,
   sportsNews: SportsNewsReducer,
   technologyNews: TechnologyNewsReducer,
-  preferenceReducer: PreferenceReducer
+  preference: PreferenceReducer,
+  selectedNewsUrl: SelectionReducer,
+  sourceWiseNews: SourceWiseNewsReducer,
+  sources: SourcesReducer,
 });
