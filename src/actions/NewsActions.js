@@ -32,19 +32,27 @@ import Status from '../Status';
 const BaseUrl = 'https://newsapi.org/v2/top-headlines?'
   + `apiKey=${API_KEY}`;
 
+// eslint-disable-next-line consistent-return
 const buildUrl = (queryParams) => {
   const { category, country, source } = queryParams;
+  // eslint-disable-next-line no-underscore-dangle
+  let _url = BaseUrl;
   if (category) {
-    return `${BaseUrl}&country=${country}&category=${category}`;
+    _url += `&category=${category}`;
+  }
+  if (country.value !== '0') {
+    _url += `&country=${country.value}`;
   }
   if (source) {
-    return `${BaseUrl}&country=${country}&source=${source}`;
+    _url += `&source=${source}`;
   }
+  return _url;
 };
 
 // eslint-disable-next-line import/prefer-default-export
 export function fetchNews(queryParams) {
   const API = buildUrl(queryParams);
+  console.log(API);
   return (dispatch) => {
     dispatch(getNews(queryParams.category));
     return (
@@ -95,6 +103,7 @@ function getNews(category) {
 
 function getNewsSuccess(data, category) {
   const action = {};
+  console.log(data);
   action.payload = {
     status: Status.SUCCESS,
     data

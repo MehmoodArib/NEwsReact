@@ -1,4 +1,5 @@
 const Countries = [
+  { code: '0', name: 'All                                                             ' },
   { code: 'ae', name: 'United Arab Emirates' },
   { code: 'ar', name: 'Argentina' },
   { code: 'at', name: 'Austria' },

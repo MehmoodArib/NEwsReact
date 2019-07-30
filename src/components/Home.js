@@ -1,53 +1,25 @@
 import React, { Component } from 'react';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { HeaderButtons, HeaderButton, Item, HiddenItem } from 'react-navigation-header-buttons';
-import { View, ActivityIndicator, Text } from 'react-native';
-import { SinglePickerMaterialDialog } from 'react-native-material-dialog';
+import { View } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
 import { fetchNews } from '../actions/NewsActions';
-import { setCountry, setLanguage } from '../actions/PrefrenceActions';
 // eslint-disable-next-line import/no-cycle
 import ListItem from './ListItem';
-import Countries from '../Countries';
-import Languages from '../Languages';
-import { Button, CardSection } from './common';
 import { BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
 import GenericTemplate from '../GenericTemplate';
 
-const MaterialIcons = passMeFurther => (
-  <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
-);
-
-
 class Home extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'NEWSREACT',
-    headerLeft: (
-      <HeaderButtons HeaderButtonComponent={MaterialIcons}>
-        <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
-      </HeaderButtons>
-    ),
-    headerRight: (
-      <HeaderButtons HeaderButtonComponent={MaterialIcons} OverflowIcon={<Icon name="more-vert" size={23} color="black" />}>
-        <HiddenItem title="Language(All)" iconName="ios-search" onPress={() => alert('search')} />
-        <HiddenItem title="Country(All)" onPress={() => alert('select')} />
-      </HeaderButtons>
-    )
-
-  });
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      LanguagePickerVisible: false,
-      CountryPickerVisible: false,
-    };
+  componentWillMount() {
+    console.log(this.props);
+    this.props.fetchNews({ category: this.props.navigation.getParam('category'), country: this.props.preference.country });
   }
 
-  componentWillMount() {
-    this.props.fetchNews({ category: this.props.navigation.getParam('Category'), country: this.props.preference.country.value });
+  componentDidUpdate(prevProps) {
+    if (prevProps.preference.country !== this.props.preference.country || prevProps.preference.language !== this.props.preference.language) {
+      this.props.fetchNews({ category: this.props.navigation.getParam('category'), country: this.props.preference.country });
+    }
   }
 
   render() {
@@ -58,40 +30,6 @@ class Home extends Component {
             data={this.props.news.articles}
             renderItem={({ item }) => <ListItem news={item} />}
           />
-          <SinglePickerMaterialDialog
-            title="Language"
-            scrolled
-            items={Languages.map(_language => ({ value: _language.code, label: _language.name }))}
-            visible={this.state.LanguagePickerVisible}
-            selectedItem={this.props.preference.language}
-            onCancel={() => this.setState({ LanguagePickerVisible: false })}
-            onOk={(result) => {
-              this.setState({ LanguagePickerVisible: false });
-              this.props.setLanguage(result.selectedItem);
-            }
-            }
-          />
-          <SinglePickerMaterialDialog
-            title="Country"
-            scrolled
-            items={Countries.map(_country => ({ value: _country.code, label: _country.name }))}
-            visible={this.state.CountryPickerVisible}
-            selectedItem={this.props.preference.country}
-            onCancel={() => this.setState({ CountryPickerVisible: false })}
-            onOk={(result) => {
-              this.setState({ CountryPickerVisible: false });
-              this.props.setCountry(result.selectedItem);
-            }
-            }
-          />
-          {
-            //   <CardSection>
-            //   <Button buttonText="Languages" onPress={() => this.setState({ LanguagePickerVisible: true })} />
-            // </CardSection>
-            // <CardSection>
-            //   <Button buttonText="Countries" onPress={() => this.setState({ CountryPickerVisible: true })} />
-            // </CardSection>
-          }
         </View>
       </GenericTemplate>
     );
@@ -100,7 +38,7 @@ class Home extends Component {
 
 
 function mapStateToProps(state, props) {
-  const category = props.navigation.getParam('Category');
+  const category = props.navigation.getParam('category');
   switch (category) {
     case GENERAL:
       return { news: state.generalNews.news, status: state.generalNews.status, errorMessage: state.generalNews.errorMessage, preference: state.preference };
@@ -117,13 +55,13 @@ function mapStateToProps(state, props) {
     case ENTERTAINMENT:
       return { news: state.entertainmentNews.news, status: state.entertainmentNews.status, errorMessage: state.entertainmentNews.errorMessage, preference: state.preference };
     default:
-      return { news: [], preference: {} };
+      return { news: [], preference: { a: 1, b: 2 } };
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    ...bindActionCreators({ fetchNews, setCountry, setLanguage }, dispatch)
+    ...bindActionCreators({ fetchNews }, dispatch)
   };
 }
 

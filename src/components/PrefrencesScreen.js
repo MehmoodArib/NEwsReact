@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { SinglePickerMaterialDialog } from 'react-native-material-dialog';
-import { View, Text } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Languages from '../Languages';
@@ -12,14 +11,6 @@ class PrefrencesScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: navigation.getParam('PrefrenceName'),
   });
-
-
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     PrefrenceName: this.props.navigation.getParam('PrefrenceName'),
-  //   };
-  // }
 
   constructor(props) {
     super(props);
@@ -38,10 +29,10 @@ class PrefrencesScreen extends Component {
         scrolled
         visible
         items={this.data.map(_item => ({ value: _item.code, label: _item.name }))}
-        selectedItem={this.props.preference.language}
+        selectedItem={this.props.preferenceValue}
         onCancel={() => this.props.navigation.pop()}
         onOk={(result) => {
-          this.props.setCountry(result.selectedItem);
+          this.props.setValue(result.selectedItem);
           this.props.navigation.pop();
         }
         }
@@ -49,12 +40,21 @@ class PrefrencesScreen extends Component {
     );
   }
 }
-function mapStateToProps(state, props) {
-  return { preference: state.preference };
+function mapStateToProps(state, ownProps) {
+  if (ownProps.navigation.getParam('PrefrenceName') === 'Country') {
+    return { preferenceValue: state.preference.country };
+  }
+  return { preferenceValue: state.preference.language };
 }
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
+  let setValue;
+  if (ownProps.navigation.getParam('PrefrenceName') === 'Country') {
+    setValue = setCountry;
+  } else {
+    setValue = setLanguage;
+  }
   return {
-    ...bindActionCreators({ setCountry, setLanguage }, dispatch)
+    ...bindActionCreators({ setValue }, dispatch)
   };
 }
 

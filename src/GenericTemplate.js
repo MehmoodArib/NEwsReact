@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { Text, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import Status from './Status';
 
 const GenericTemplate = ({
@@ -12,18 +13,17 @@ const GenericTemplate = ({
   }
 
   if (status === Status.DEFAULT || status === Status.LOADING) {
-    console.log("Loading");
     return (
-      <View style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, justifyContent: 'center' }}>
         <ActivityIndicator size="large" color="#0000ff" />
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }}>
       {children}
-    </View>
+    </SafeAreaView>
   );
 };
 

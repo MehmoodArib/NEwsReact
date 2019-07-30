@@ -3,33 +3,19 @@ import { View, Text } from 'react-native';
 import { FlatList, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { API_KEY } from '../types';
 import DrawerItem from './DrawerItem';
-import { CardSection } from './common';
+import { fetchSources } from '../actions/SourcesAction';
 import { PREFRENCES_SCREEN } from '../Navigation/types';
 
-const url = 'https://newsapi.org/v2/sources?'
-  + `apiKey=${API_KEY}`;
-
 class DrawerContent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: {
-        sources: [],
-      }
-    };
+  componentDidMount() {
+    this.props.fetchSources({ language: this.props.preference.language, country: this.props.preference.country });
   }
 
-  componentDidMount() {
-    fetch(url)
-      .then((response) => {
-        return response.json();
-      }).then((data) => {
-        this.setState({
-          data
-        });
-      });
+  componentDidUpdate(prevProps) {
+    if (prevProps.preference.country !== this.props.preference.country || prevProps.preference.language !== this.props.preference.language) {
+      this.props.fetchSources({ language: this.props.preference.language, country: this.props.preference.country });
+    }
   }
 
   render() {
@@ -45,7 +31,7 @@ class DrawerContent extends Component {
         >
           <View style={Styles.settingsStyle}>
             <Text style={Styles.textStyle}>Language</Text>
-            <Text style={Styles.textStyle}>English</Text>
+            <Text style={Styles.textStyle}>{this.props.preference.language.label}</Text>
           </View>
         </TouchableWithoutFeedback>
 
@@ -56,7 +42,7 @@ class DrawerContent extends Component {
         >
           <View style={Styles.settingsStyle}>
             <Text style={Styles.textStyle}>Country</Text>
-            <Text style={Styles.textStyle}>India</Text>
+            <Text style={Styles.textStyle}>{this.props.preference.country.label}</Text>
           </View>
         </TouchableWithoutFeedback>
 
@@ -64,8 +50,9 @@ class DrawerContent extends Component {
         <View style={Styles.blackLine} />
         <Text style={Styles.textStyle}>Sources</Text>
         <View style={Styles.blackLine} />
+
         <FlatList
-          data={this.state.data.sources}
+          data={this.props.sources.sources}
           renderItem={({ item }) => <DrawerItem sources={item} />}
         />
       </View>
@@ -87,7 +74,9 @@ const Styles = {
 };
 
 function mapStateToProps(state, props) {
-  return { preference: state.preference };
+  return {
+    preference: state.preference, sources: state.sourcesReducer.sources, status: state.sourcesReducer.status, errorMessage: state.sourcesReducer.errorMessage
+  };
 }
 function mapDispatchToProps(dispatch) {
   return {

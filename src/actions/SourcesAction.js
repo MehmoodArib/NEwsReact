@@ -4,13 +4,32 @@ import {
   FETCHING_SOURCES_FAILURE,
   FETCHING_SOURCES_SUCCESS
 } from './types';
+import { API_KEY } from '../types';
 
-export function fetchNews(queryParams) {
-  const API = buildUrl(queryParams);
+
+const url = 'https://newsapi.org/v2/sources?'
+  + `apiKey=${API_KEY}`;
+
+function buildUrl(preference) {
+  // eslint-disable-next-line no-underscore-dangle
+  let _url = url;
+  if (preference.country.value !== '0') {
+    _url += `&country=${preference.country.value}`;
+  }
+  if (preference.language.value !== '0') {
+    _url += `&language=${preference.language.value}`;
+  }
+  return _url;
+}
+
+// eslint-disable-next-line import/prefer-default-export
+export function fetchSources(preference) {
+  const finalUrl = buildUrl(preference);
+  console.log(finalUrl);
   return (dispatch) => {
     dispatch(getSources());
     return (
-      fetch(API))
+      fetch(finalUrl))
       .then(res => res.json())
       .then((json) => {
         dispatch(getSourcesSuccess(json));

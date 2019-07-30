@@ -23,5 +23,5 @@ export default combineReducers({
   preference: PreferenceReducer,
   selectedNewsUrl: SelectionReducer,
   sourceWiseNews: SourceWiseNewsReducer,
-  sources: SourcesReducer,
+  sourcesReducer: SourcesReducer,
 });

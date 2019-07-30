@@ -1,7 +1,7 @@
 import { CHANGE_COUNTRY, CHANGE_LANGUAGE } from '../actions/types';
 
 const initialState = {
-  country: { value: 'in', label: 'India', selected: true },
+  country: { value: '0', label: 'All', selected: true },
   language: { value: '0', label: 'All', selected: true },
 };
 

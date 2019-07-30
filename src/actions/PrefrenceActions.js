@@ -1,3 +1,5 @@
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable no-undef */
 import { CHANGE_COUNTRY, CHANGE_LANGUAGE } from './types';
 
 export function setCountry(country) {
@@ -6,7 +8,6 @@ export function setCountry(country) {
     payload: country
   };
 }
-
 export function setLanguage(language) {
   return {
     type: CHANGE_LANGUAGE,

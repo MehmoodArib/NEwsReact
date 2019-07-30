@@ -1,7 +1,7 @@
 import {
   FETCHING_SOURCES,
-  FETCH_SOURCE_NEWS_SUCCESS,
-  FETCH_SOURCE_NEWS_FAILURE,
+  FETCHING_SOURCES_SUCCESS,
+  FETCHING_SOURCES_FAILURE
 } from '../actions/types';
 import Status from '../Status';
 
@@ -13,18 +13,18 @@ const initialState = {
 
 export default function SourcesReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCHING_SCIENCE_NEWS:
+    case FETCHING_SOURCES:
       return {
         ...state,
         status: action.payload.status,
       };
-    case FETCH_SCIENCE_NEWS_SUCCESS:
+    case FETCHING_SOURCES_SUCCESS:
       return {
         ...state,
         status: action.payload.status,
-        news: action.payload.data
+        sources: action.payload.data
       };
-    case FETCH_SCIENCE_NEWS_FAILURE:
+    case FETCHING_SOURCES_FAILURE:
       return {
         ...state,
         status: action.payload.status,

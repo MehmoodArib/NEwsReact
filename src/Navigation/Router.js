@@ -1,6 +1,6 @@
-// import React from 'react';
-// import Icon from 'react-native-vector-icons/MaterialIcons';
-// import { HeaderButtons, HeaderButton, Item, HiddenItem } from 'react-navigation-header-buttons';
+import React from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { HeaderButtons, HeaderButton, Item, HiddenItem } from 'react-navigation-header-buttons';
 import { createStackNavigator, createAppContainer, createDrawerNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 // eslint-disable-next-line import/no-cycle
 import Home from '../components/Home';
@@ -17,44 +17,44 @@ const HomeStack = createMaterialTopTabNavigator(
     GENERAL: {
       screen: Home,
       params: {
-        Category: GENERAL
+        category: GENERAL
       }
     },
 
     BUSINESS: {
       screen: Home,
       params: {
-        Category: BUSINESS
+        category: BUSINESS
       }
     },
     ENTERTAINMENT: {
       screen: Home,
       params: {
-        Category: ENTERTAINMENT
+        category: ENTERTAINMENT
       }
     },
     HEALTH: {
       screen: Home,
       params: {
-        Category: HEALTH
+        category: HEALTH
       }
     },
     SCIENCE: {
       screen: Home,
       params: {
-        Category: SCIENCE
+        category: SCIENCE
       }
     },
     SPORTS: {
       screen: Home,
       params: {
-        Category: SPORTS
+        category: SPORTS
       }
     },
     TECHNOLOGY: {
       screen: Home,
       params: {
-        Category: TECHNOLOGY
+        category: TECHNOLOGY
       }
     },
   },
@@ -93,35 +93,29 @@ const MainDrawer = createDrawerNavigator(
     // mode: 'card'
   }
 );
-// const MaterialIcons = passMeFurther => (
-//   <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
-// );
+const MaterialIcons = passMeFurther => (
+  <HeaderButton {...passMeFurther} IconComponent={Icon} iconSize={24} color="black" />
+);
 
 const RootStack = createStackNavigator(
   {
     [MAIN_SCREEN]: {
       screen: MainDrawer,
-      // navigationOptions: ({ navigation }) => ({
-      //   headerTitle: 'NEWSREACT',
-      //   headerLeft: (
-      //     <HeaderButtons HeaderButtonComponent={MaterialIcons}>
-      //       <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
-      //     </HeaderButtons>
-      //   ),
-      //   headerRight: (
-      //     <HeaderButtons HeaderButtonComponent={MaterialIcons} OverflowIcon={<Icon name="more-vert" size={23} color="black" />}>
-      //       <HiddenItem title="Language(All)" iconName="ios-search" onPress={() => alert('search')} />
-      //       <HiddenItem title="Country(All)" onPress={() => alert('select')} />
-      //     </HeaderButtons>
-      //   ),
-      // }),
+      navigationOptions: ({ navigation }) => ({
+        headerTitle: 'NEWSREACT',
+        headerLeft: (
+          <HeaderButtons HeaderButtonComponent={MaterialIcons}>
+            <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
+          </HeaderButtons>
+        )
+      }),
     },
     [SPECIAL_SCREEN]: { screen: Special },
     [MY_WEBVIEW]: { screen: MyWebView },
     [PREFRENCES_SCREEN]: { screen: PrefrencesScreen }
   },
   {
-    headerMode: 'none'
+    // headerMode: 'none'
   }
 );
 export default createAppContainer(RootStack);
