@@ -10,29 +10,22 @@ import GenericTemplate from '../GenericTemplate';
 
 class Special extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Special',
+    headerTitle: navigation.getParam('name'),
   });
 
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: this.props.navigation.getParam('name'),
-      id: this.props.navigation.getParam('id'),
-    };
-  }
-
   componentWillMount() {
-    this.props.fetchNews({ source: this.state.id, category: SOURCE, country: 'in' });
+    this.props.fetchNews({ source: this.props.navigation.getParam('id'), category: SOURCE });
   }
 
   render() {
     return (
       <GenericTemplate status={this.props.status} errorMessage={this.props.errorMessage}>
-        <FlatList
-          data={this.props.news.articles}
-          renderItem={({ item }) => <ListItem news={item} />}
-        />
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <FlatList
+            data={this.props.news.articles}
+            renderItem={({ item }) => <ListItem news={item} />}
+          />
+        </View>
       </GenericTemplate>
     );
   }

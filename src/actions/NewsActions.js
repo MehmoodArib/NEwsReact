@@ -37,14 +37,14 @@ const buildUrl = (queryParams) => {
   const { category, country, source } = queryParams;
   // eslint-disable-next-line no-underscore-dangle
   let _url = BaseUrl;
-  if (category) {
+  if (category && category !== SOURCE) {
     _url += `&category=${category}`;
   }
-  if (country.value !== '0') {
+  if (country && country.value !== '0') {
     _url += `&country=${country.value}`;
   }
   if (source) {
-    _url += `&source=${source}`;
+    _url += `&sources=${source}`;
   }
   return _url;
 };
