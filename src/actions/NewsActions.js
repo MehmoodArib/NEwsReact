@@ -23,18 +23,25 @@ import {
   FETCHING_SOURCE_NEWS,
   FETCH_SOURCE_NEWS_FAILURE,
   FETCH_SOURCE_NEWS_SUCCESS,
+  FETCHING_SEARCH,
+  FETCH_SEARCH_SUCCESS,
+  FETCH_SEARCH_FAILURE
 } from './types';
 
-import { API_KEY, BUSINESS, GENERAL, ENTERTAINMENT, SCIENCE, SPORTS, HEALTH, TECHNOLOGY, SOURCE } from '../types';
+import {
+  API_KEY, BUSINESS, GENERAL, ENTERTAINMENT, SCIENCE, SPORTS, HEALTH, TECHNOLOGY, SOURCE, SEARCH
+} from '../types';
 
 import Status from '../Status';
 
 const BaseUrl = 'https://newsapi.org/v2/top-headlines?'
   + `apiKey=${API_KEY}`;
 
+const BaseUrlSearch = 'https://newsapi.org/v2/everything?'
+  + `apiKey=${API_KEY}`;
 // eslint-disable-next-line consistent-return
 const buildUrl = (queryParams) => {
-  const { category, country, source } = queryParams;
+  const { category, country } = queryParams;
   // eslint-disable-next-line no-underscore-dangle
   let _url = BaseUrl;
   if (category && category !== SOURCE) {
@@ -43,16 +50,11 @@ const buildUrl = (queryParams) => {
   if (country && country.value !== '0') {
     _url += `&country=${country.value}`;
   }
-  if (source) {
-    _url += `&sources=${source}`;
-  }
   return _url;
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export function fetchNews(queryParams) {
   const API = buildUrl(queryParams);
-  console.log(API);
   return (dispatch) => {
     dispatch(getNews(queryParams.category));
     return (
@@ -64,6 +66,21 @@ export function fetchNews(queryParams) {
       .catch(err => dispatch(getNewsFailure(err, queryParams.category)));
   };
 }
+
+export function fetchSearch(queryParams) {
+  const API = `${BaseUrlSearch}&q=${queryParams.searchText}`;
+  return (dispatch) => {
+    dispatch(getNews(queryParams.category));
+    return (
+      fetch(API))
+      .then(res => res.json())
+      .then((json) => {
+        dispatch(getNewsSuccess(json, queryParams.category));
+      })
+      .catch(err => dispatch(getNewsFailure(err, queryParams.category)));
+  };
+}
+
 
 function getNews(category) {
   const action = {};
@@ -95,6 +112,9 @@ function getNews(category) {
     case SOURCE:
       action.type = FETCHING_SOURCE_NEWS;
       break;
+    case SEARCH:
+      action.type = FETCHING_SEARCH;
+      break;
     default:
       throw new Error('UnSupported Category');
   }
@@ -103,7 +123,6 @@ function getNews(category) {
 
 function getNewsSuccess(data, category) {
   const action = {};
-  console.log(data);
   action.payload = {
     status: Status.SUCCESS,
     data
@@ -132,6 +151,9 @@ function getNewsSuccess(data, category) {
       break;
     case SOURCE:
       action.type = FETCH_SOURCE_NEWS_SUCCESS;
+      break;
+    case SEARCH:
+      action.type = FETCH_SEARCH_SUCCESS;
       break;
     default:
       throw new Error('UnSupported Category');
@@ -169,6 +191,9 @@ function getNewsFailure(error, category) {
       break;
     case SOURCE:
       action.type = FETCH_SOURCE_NEWS_FAILURE;
+      break;
+    case SEARCH:
+      action.type = FETCH_SEARCH_FAILURE;
       break;
     default:
       throw new Error('UnSupported Category');

@@ -10,6 +10,7 @@ import SourceWiseNewsReducer from './SourceWiseNewsReducer';
 import PreferenceReducer from './PreferenceReducer';
 import SelectionReducer from './SelectionReducer';
 import SourcesReducer from './SourcesReducer';
+import SearchReducer from './SearchReducer';
 
 
 export default combineReducers({
@@ -24,4 +25,5 @@ export default combineReducers({
   selectedNewsUrl: SelectionReducer,
   sourceWiseNews: SourceWiseNewsReducer,
   sourcesReducer: SourcesReducer,
+  searchReducer: SearchReducer,
 });

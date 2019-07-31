@@ -1,15 +1,22 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { HeaderButtons, HeaderButton, Item, HiddenItem } from 'react-navigation-header-buttons';
-import { createStackNavigator, createAppContainer, createDrawerNavigator, createMaterialTopTabNavigator } from 'react-navigation';
+import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
+import {
+  createStackNavigator, createAppContainer, createDrawerNavigator, createMaterialTopTabNavigator
+} from 'react-navigation';
 // eslint-disable-next-line import/no-cycle
 import Home from '../components/Home';
-import Special from '../components/Special';
 import DrawerContent from '../components/DrawerContent';
 import MyWebView from '../components/MyWebView';
 import PrefrencesScreen from '../components/PrefrencesScreen';
-import { MAIN_SCREEN, SPECIAL_SCREEN, MY_WEBVIEW, PREFRENCES_SCREEN } from './types';
-import { BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS } from '../types';
+import {
+  MAIN_SCREEN, SOURCE_NEWS_SCREEN, SEARCH_SCREEN, MY_WEBVIEW, PREFRENCES_SCREEN
+} from './types';
+import {
+  BUSINESS, TECHNOLOGY, GENERAL, ENTERTAINMENT, HEALTH, SCIENCE, SPORTS
+} from '../types';
+import SourceNewsScreen from '../components/SourceNewsScreen';
+import SearchScreen from '../components/SearchScreen';
 
 
 const HomeStack = createMaterialTopTabNavigator(
@@ -102,17 +109,25 @@ const RootStack = createStackNavigator(
     [MAIN_SCREEN]: {
       screen: MainDrawer,
       navigationOptions: ({ navigation }) => ({
-        headerTitle: 'NEWSREACT',
+        title: 'NEWSREACT',
+        headerBackTitle: null,
         headerLeft: (
           <HeaderButtons HeaderButtonComponent={MaterialIcons}>
-            <Item title="search" iconName="menu" onPress={() => navigation.toggleDrawer()} />
+            <Item title="menu" iconName="menu" onPress={() => navigation.toggleDrawer()} />
+          </HeaderButtons>
+        ),
+        headerRight: (
+          <HeaderButtons HeaderButtonComponent={MaterialIcons}>
+            <Item title="search" iconName="search" onPress={() => navigation.navigate(SEARCH_SCREEN)} />
           </HeaderButtons>
         )
       }),
+
     },
-    [SPECIAL_SCREEN]: { screen: Special },
+    [SOURCE_NEWS_SCREEN]: { screen: SourceNewsScreen },
     [MY_WEBVIEW]: { screen: MyWebView },
-    [PREFRENCES_SCREEN]: { screen: PrefrencesScreen }
+    [PREFRENCES_SCREEN]: { screen: PrefrencesScreen },
+    [SEARCH_SCREEN]: { screen: SearchScreen }
   },
   {
     // headerMode: 'none'

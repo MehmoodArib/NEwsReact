@@ -4,7 +4,8 @@ import { WebView } from 'react-native-webview';
 class MyWebView extends Component {
   constructor(props) {
     super(props);
-    this.url = this.props.navigation.getParam('url');
+    const { navigation } = this.props;
+    this.url = navigation.getParam('url');
   }
 
   render() {

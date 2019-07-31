@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import {
-  Text, TouchableWithoutFeedback, Image,
+  Text, TouchableWithoutFeedback, Image, View,
   LayoutAnimation, Platform, UIManager
 } from 'react-native';
 import { connect } from 'react-redux';
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import Share from 'react-native-share';
 import { CardSection, Card, Button } from './common';
 import * as actions from '../actions/ItemActions';
 import NavigationService from '../NavigationService';
@@ -15,13 +17,31 @@ class ListItem extends Component {
     super(props);
 
     if (Platform.OS === 'android') {
-      UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
+      // eslint-disable-next-line no-unused-expressions
+      UIManager.setLayoutAnimationEnabledExperimental
+        && UIManager.setLayoutAnimationEnabledExperimental(true);
     }
   }
 
   componentWillUpdate() {
     LayoutAnimation.linear();
   }
+
+  share = async () => {
+    const shareOptions = {
+      title: this.props.news.title,
+      url: this.props.news.url,
+      failOnCancel: false,
+    };
+
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+      setResult(JSON.stringify(ShareResponse, null, 2));
+    } catch (error) {
+      console.log('Error =>', error);
+      setResult('error: '.concat(getErrorString(error)));
+    }
+  };
 
   renderDescription() {
     const { news, expanded } = this.props;
@@ -34,14 +54,20 @@ class ListItem extends Component {
           <Text style={{ flex: 1, fontSize: 22 }}>
             {news.description}
           </Text>
-          <Button buttonText="SOURCE" onPress={() => { NavigationService.navigate(MY_WEBVIEW, { url: news.url }); }} />
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            <Button buttonText="SOURCE" onPress={() => { NavigationService.navigate(MY_WEBVIEW, { url: news.url }); }} />
+            <TouchableWithoutFeedback onPress={this.share}>
+              <Icon name="share-square" size={35} color="#007aff" />
+            </TouchableWithoutFeedback>
+          </View>
         </CardSection>
       );
     }
+    return {};
   }
 
   render() {
-    const { news } = this.props;
+    const { news, selectNews } = this.props;
     const {
       imageStyle, titleStyle, detailsStyle, whiteText
     } = styles;
@@ -51,7 +77,7 @@ class ListItem extends Component {
           style={imageStyle}
           source={{ uri: news.urlToImage }}
         />
-        <TouchableWithoutFeedback onPress={() => this.props.selectNews(news.url)}>
+        <TouchableWithoutFeedback onPress={() => selectNews(news.url)}>
           <LinearGradient
             colors={['transparent', '#000000']}
             style={{
@@ -84,8 +110,8 @@ const styles = {
     color: 'white',
   },
   imageStyle: {
-    width: 400,
-    height: 400,
+    width: 350,
+    height: 350,
     justifyContent: 'flex-end'
   },
   detailsStyle: {

@@ -14,26 +14,28 @@ class PrefrencesScreen extends Component {
 
   constructor(props) {
     super(props);
-    if (this.props.navigation.getParam('PrefrenceName') === 'Country') {
+    const { navigation } = this.props;
+    if (navigation.getParam('PrefrenceName') === 'Country') {
       this.data = Countries;
     }
-    if (this.props.navigation.getParam('PrefrenceName') === 'Language') {
+    if (navigation.getParam('PrefrenceName') === 'Language') {
       this.data = Languages;
     }
   }
 
   render() {
+    const { navigation, setValue, preferenceValue } = this.props;
     return (
       <SinglePickerMaterialDialog
-        title={this.props.navigation.getParam('PrefrenceName')}
+        title={navigation.getParam('PrefrenceName')}
         scrolled
         visible
         items={this.data.map(_item => ({ value: _item.code, label: _item.name }))}
-        selectedItem={this.props.preferenceValue}
-        onCancel={() => this.props.navigation.pop()}
+        selectedItem={preferenceValue}
+        onCancel={() => navigation.pop()}
         onOk={(result) => {
-          this.props.setValue(result.selectedItem);
-          this.props.navigation.pop();
+          setValue(result.selectedItem);
+          navigation.pop();
         }
         }
       />

@@ -7,3 +7,4 @@ export const SCIENCE = 'science';
 export const SPORTS = 'sports';
 export const TECHNOLOGY = 'technology';
 export const SOURCE = 'source';
+export const SEARCH = 'search';

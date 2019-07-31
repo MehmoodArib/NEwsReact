@@ -9,16 +9,20 @@ import { PREFRENCES_SCREEN } from '../Navigation/types';
 
 class DrawerContent extends Component {
   componentDidMount() {
-    this.props.fetchSources({ language: this.props.preference.language, country: this.props.preference.country });
+    const { fetchSource: _fetchSources, preference } = this.props;
+    _fetchSources({ language: preference.language, country: preference.country });
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.preference.country !== this.props.preference.country || prevProps.preference.language !== this.props.preference.language) {
-      this.props.fetchSources({ language: this.props.preference.language, country: this.props.preference.country });
+    const { fetchSource: _fetchSources, preference } = this.props;
+    if (prevProps.preference.country !== preference.country
+      || prevProps.preference.language !== preference.language) {
+      _fetchSources({ language: preference.language, country: preference.country });
     }
   }
 
   render() {
+    const { preference, navigation, sources } = this.props;
     return (
       <View>
         <Text style={Styles.textStyle}>Settings</Text>
@@ -26,23 +30,23 @@ class DrawerContent extends Component {
 
 
         <TouchableWithoutFeedback onPress={() => {
-          this.props.navigation.navigate(PREFRENCES_SCREEN, { PrefrenceName: 'Language' });
+          navigation.navigate(PREFRENCES_SCREEN, { PrefrenceName: 'Language' });
         }}
         >
           <View style={Styles.settingsStyle}>
             <Text style={Styles.textStyle}>Language</Text>
-            <Text style={Styles.textStyle}>{this.props.preference.language.label}</Text>
+            <Text style={Styles.textStyle}>{preference.language.label}</Text>
           </View>
         </TouchableWithoutFeedback>
 
 
         <TouchableWithoutFeedback onPress={() => {
-          this.props.navigation.navigate(PREFRENCES_SCREEN, { PrefrenceName: 'Country' });
+          navigation.navigate(PREFRENCES_SCREEN, { PrefrenceName: 'Country' });
         }}
         >
           <View style={Styles.settingsStyle}>
             <Text style={Styles.textStyle}>Country</Text>
-            <Text style={Styles.textStyle}>{this.props.preference.country.label}</Text>
+            <Text style={Styles.textStyle}>{preference.country.label}</Text>
           </View>
         </TouchableWithoutFeedback>
 
@@ -52,7 +56,7 @@ class DrawerContent extends Component {
         <View style={Styles.blackLine} />
 
         <FlatList
-          data={this.props.sources.sources}
+          data={sources.sources}
           renderItem={({ item }) => <DrawerItem sources={item} />}
         />
       </View>
@@ -73,9 +77,12 @@ const Styles = {
   }
 };
 
-function mapStateToProps(state, props) {
+function mapStateToProps(state) {
   return {
-    preference: state.preference, sources: state.sourcesReducer.sources, status: state.sourcesReducer.status, errorMessage: state.sourcesReducer.errorMessage
+    preference: state.preference,
+    sources: state.sourcesReducer.sources,
+    status: state.sourcesReducer.status,
+    errorMessage: state.sourcesReducer.errorMessage
   };
 }
 function mapDispatchToProps(dispatch) {

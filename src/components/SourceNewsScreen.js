@@ -8,21 +8,23 @@ import { fetchNews } from '../actions/NewsActions';
 import { SOURCE } from '../types';
 import GenericTemplate from '../GenericTemplate';
 
-class Special extends Component {
+class SourceNewsScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: navigation.getParam('name'),
+    headerTitle: navigation.getParam('sourceName'),
   });
 
   componentWillMount() {
-    this.props.fetchNews({ source: this.props.navigation.getParam('id'), category: SOURCE });
+    const { navigation, fetchNews: _fetchNews } = this.props;
+    _fetchNews({ source: navigation.getParam('sourceId'), category: SOURCE });
   }
 
   render() {
+    const { status, errorMessage, news } = this.props;
     return (
-      <GenericTemplate status={this.props.status} errorMessage={this.props.errorMessage}>
+      <GenericTemplate status={status} errorMessage={errorMessage}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <FlatList
-            data={this.props.news.articles}
+            data={news.articles}
             renderItem={({ item }) => <ListItem news={item} />}
           />
         </View>
@@ -32,11 +34,15 @@ class Special extends Component {
 }
 
 function mapStateToProps(state) {
-  return { news: state.sourceWiseNews.news, status: state.sourceWiseNews.status, errorMessage: state.sourceWiseNews.errorMessage, preference: state.preference };
+  return {
+    news: state.sourceWiseNews.news,
+    status: state.sourceWiseNews.status,
+    errorMessage: state.sourceWiseNews.errorMessage
+  };
 }
 function mapDispatchToProps(dispatch) {
   return {
     ...bindActionCreators({ fetchNews }, dispatch)
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Special);
+export default connect(mapStateToProps, mapDispatchToProps)(SourceNewsScreen);

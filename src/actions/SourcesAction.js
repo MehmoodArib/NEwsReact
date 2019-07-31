@@ -25,7 +25,6 @@ function buildUrl(preference) {
 // eslint-disable-next-line import/prefer-default-export
 export function fetchSources(preference) {
   const finalUrl = buildUrl(preference);
-  console.log(finalUrl);
   return (dispatch) => {
     dispatch(getSources());
     return (
