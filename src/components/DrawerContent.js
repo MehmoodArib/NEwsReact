@@ -9,12 +9,12 @@ import { PREFRENCES_SCREEN } from '../Navigation/types';
 
 class DrawerContent extends Component {
   componentDidMount() {
-    const { fetchSource: _fetchSources, preference } = this.props;
+    const { fetchSources: _fetchSources, preference } = this.props;
     _fetchSources({ language: preference.language, country: preference.country });
   }
 
   componentDidUpdate(prevProps) {
-    const { fetchSource: _fetchSources, preference } = this.props;
+    const { fetchSources: _fetchSources, preference } = this.props;
     if (prevProps.preference.country !== preference.country
       || prevProps.preference.language !== preference.language) {
       _fetchSources({ language: preference.language, country: preference.country });

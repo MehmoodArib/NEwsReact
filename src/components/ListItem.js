@@ -15,7 +15,6 @@ import { MY_WEBVIEW } from '../Navigation/types';
 class ListItem extends Component {
   constructor(props) {
     super(props);
-
     if (Platform.OS === 'android') {
       // eslint-disable-next-line no-unused-expressions
       UIManager.setLayoutAnimationEnabledExperimental
@@ -27,21 +26,21 @@ class ListItem extends Component {
     LayoutAnimation.linear();
   }
 
-  share = async () => {
-    const shareOptions = {
-      title: this.props.news.title,
-      url: this.props.news.url,
-      failOnCancel: false,
-    };
+  // share = async () => {
+  //   const shareOptions = {
+  //     title: this.props.news.title,
+  //     url: this.props.news.url,
+  //     failOnCancel: false,
+  //   };
 
-    try {
-      const ShareResponse = await Share.open(shareOptions);
-      setResult(JSON.stringify(ShareResponse, null, 2));
-    } catch (error) {
-      console.log('Error =>', error);
-      setResult('error: '.concat(getErrorString(error)));
-    }
-  };
+  //   try {
+  //     const ShareResponse = await Share.open(shareOptions);
+  //     setResult(JSON.stringify(ShareResponse, null, 2));
+  //   } catch (error) {
+  //     console.log('Error =>', error);
+  //     setResult('error: '.concat(getErrorString(error)));
+  //   }
+  // };
 
   renderDescription() {
     const { news, expanded } = this.props;
@@ -56,14 +55,14 @@ class ListItem extends Component {
           </Text>
           <View style={{ flex: 1, flexDirection: 'row' }}>
             <Button buttonText="SOURCE" onPress={() => { NavigationService.navigate(MY_WEBVIEW, { url: news.url }); }} />
-            <TouchableWithoutFeedback onPress={this.share}>
+            <TouchableWithoutFeedback onPress={{}}>
               <Icon name="share-square" size={35} color="#007aff" />
             </TouchableWithoutFeedback>
           </View>
         </CardSection>
       );
     }
-    return {};
+    return (<View />);
   }
 
   render() {

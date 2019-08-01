@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View , Text} from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { FlatList } from 'react-native-gesture-handler';
@@ -33,6 +33,7 @@ class Home extends Component {
 
   render() {
     const { status, errorMessage, news } = this.props;
+    console.log(news.articles);
     return (
       <GenericTemplate status={status} errorMessage={errorMessage}>
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
